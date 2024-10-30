@@ -20,7 +20,7 @@ function Header() {
   const viewOpenSource = openSource.display;
   const viewSkills = skillsSection.display;
   const viewAchievement = achievementSection.display;
-  const viewBlog = blogSection.display;
+  // const viewBlog = blogSection.display;
   const viewTalks = talkSection.display;
   const viewResume = resumeSection.display;
 
@@ -61,16 +61,16 @@ function Header() {
               <a href="#achievements">Achievements</a>
             </li>
           )}
-          {viewBlog && (
+          {/* {viewBlog && (
             <li>
               <a href="#blogs">Blogs</a>
             </li>
-          )}
-          {viewTalks && (
+          )} */}
+          {/* {viewTalks && (
             <li>
               <a href="#talks">Talks</a>
             </li>
-          )}
+          )} */}
           {viewResume && (
             <li>
               <a href="#resume">Resume</a>
