@@ -1,6 +1,4 @@
-.github
-images
-node_modules
-build
-public
-*.json
+src/serviceWorker.js
+package-lock.json
+src/assets/lottie
+

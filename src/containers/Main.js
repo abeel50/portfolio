@@ -1,76 +1,76 @@
-import React, { Component } from "react";
-import { Route, Switch, BrowserRouter } from "react-router-dom";
-import Home from "../pages/home/HomeComponent";
-import Splash from "../pages/splash/Splash";
-import Education from "../pages/education/EducationComponent";
-import Experience from "../pages/experience/Experience";
-import Opensource from "../pages/opensource/Opensource";
-import Contact from "../pages/contact/ContactComponent";
-import Projects from "../pages/projects/Projects";
-import { settings } from "../portfolio.js";
-import Error404 from "../pages/errors/error404/Error";
+import React, {useEffect, useState} from "react";
+import Header from "../components/header/Header";
+import Greeting from "./greeting/Greeting";
+import Skills from "./skills/Skills";
+import StackProgress from "./skillProgress/skillProgress";
+import WorkExperience from "./workExperience/WorkExperience";
+import Projects from "./projects/Projects";
+import StartupProject from "./StartupProjects/StartupProject";
+import Achievement from "./achievement/Achievement";
+import Blogs from "./blogs/Blogs";
+import Footer from "../components/footer/Footer";
+import Talks from "./talks/Talks";
+import Podcast from "./podcast/Podcast";
+import Education from "./education/Education";
+import ScrollToTopButton from "./topbutton/Top";
+import Twitter from "./twitter-embed/twitter";
+import Profile from "./profile/Profile";
+import SplashScreen from "./splashScreen/SplashScreen";
+import {splashScreen} from "../portfolio";
+import {StyleProvider} from "../contexts/StyleContext";
+import {useLocalStorage} from "../hooks/useLocalStorage";
+import "./Main.scss";
 
-export default class Main extends Component {
-  render() {
-    return (
-      <BrowserRouter basename="/">
-        <Switch>
-          <Route
-            path="/"
-            exact
-            render={(props) =>
-              settings.isSplash ? (
-                <Splash {...props} theme={this.props.theme} />
-              ) : (
-                <Home {...props} theme={this.props.theme} />
-              )
-            }
-          />
-          <Route
-            path="/home"
-            render={(props) => <Home {...props} theme={this.props.theme} />}
-          />
-          <Route
-            path="/experience"
-            exact
-            render={(props) => (
-              <Experience {...props} theme={this.props.theme} />
-            )}
-          />
-          <Route
-            path="/education"
-            render={(props) => (
-              <Education {...props} theme={this.props.theme} />
-            )}
-          />
-          <Route
-            path="/opensource"
-            render={(props) => (
-              <Opensource {...props} theme={this.props.theme} />
-            )}
-          />
-          <Route
-            path="/contact"
-            render={(props) => <Contact {...props} theme={this.props.theme} />}
-          />
+const Main = () => {
+  const darkPref = window.matchMedia("(prefers-color-scheme: dark)");
+  const [isDark, setIsDark] = useLocalStorage("isDark", darkPref.matches);
+  const [isShowingSplashAnimation, setIsShowingSplashAnimation] =
+    useState(true);
 
-          {settings.isSplash && (
-            <Route
-              path="/splash"
-              render={(props) => <Splash {...props} theme={this.props.theme} />}
-            />
-          )}
+  useEffect(() => {
+    if (splashScreen.enabled) {
+      const splashTimer = setTimeout(
+        () => setIsShowingSplashAnimation(false),
+        splashScreen.duration
+      );
+      return () => {
+        clearTimeout(splashTimer);
+      };
+    }
+  }, []);
 
-          <Route
-            path="/projects"
-            render={(props) => <Projects {...props} theme={this.props.theme} />}
-          />
-          <Route
-            path="*"
-            render={(props) => <Error404 {...props} theme={this.props.theme} />}
-          />
-        </Switch>
-      </BrowserRouter>
-    );
-  }
-}
+  const changeTheme = () => {
+    setIsDark(!isDark);
+  };
+
+  return (
+    <div className={isDark ? "dark-mode" : null}>
+      <StyleProvider value={{isDark: isDark, changeTheme: changeTheme}}>
+        {isShowingSplashAnimation && splashScreen.enabled ? (
+          <SplashScreen />
+        ) : (
+          <>
+            <Header />
+            <Greeting />
+            <Skills />
+            <StackProgress />
+            <Education />
+            <WorkExperience />
+            <Projects />
+            <StartupProject />
+            <Achievement />
+            <Blogs />
+            <Talks />
+            <Twitter />
+            <Podcast />
+            <Profile />
+            <Footer />
+            <ScrollToTopButton />
+          </>
+        )}
+      </StyleProvider>
+    </div>
+  );
+};
+
+export default Main;
